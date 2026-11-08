@@ -18,7 +18,7 @@ Applies to any AI agent (Claude Code, subagents, others) working in this repo.
 4. Add or update tests (mandatory for concurrency, confirm, cancel, expiry).
 5. Build and run tests. Report failures verbatim; never claim success without running.
 6. Update `PHASES.md` checkbox and the relevant `MEMORY.md`.
-7. Commit with a Conventional Commit message (see `RULES.md` §4).
+7. Do NOT commit. Suggest a Conventional Commit message (see `RULES.md` §4); the user runs every commit.
 
 ## 3. Boundaries
 - Never change the API contract. Extra fields only.
@@ -26,6 +26,7 @@ Applies to any AI agent (Claude Code, subagents, others) working in this repo.
 - Never introduce UI patterns banned in `DESIGN.md` (gradients, badges, filler text, extra colors).
 - Never commit the assignment PDF, secrets, or build output.
 - Do not add dependencies without a reason noted in the relevant `MEMORY.md`.
+- Never run `git commit`, `git branch -m` or `git push`; the user makes all commits.
 - Ask the user before: pushing, force operations, deleting files, rewriting history, publishing anywhere.
 
 ## 4. Roles (when delegating to subagents)
@@ -43,7 +44,7 @@ Subagents get a self-contained prompt: goal, files, constraints, expected output
 - [ ] Relevant tests pass (and concurrency test still passes)
 - [ ] No 500 reachable from invalid input in what you touched
 - [ ] UI matches `DESIGN.md`; all states handled (loading, empty, error)
-- [ ] Memory + phases updated; commit made
+- [ ] Memory + phases updated; commit message suggested to the user
 
 ## 6. AI usage log (feeds `AI_USAGE.md`)
 Whenever an AI-generated output was wrong, misleading, or needed correction, append a line to the root `MEMORY.md` under "AI mistakes log": *what was wrong → how it was caught → fix*. Only real events; never invent entries. At release, summarize them in `AI_USAGE.md`.

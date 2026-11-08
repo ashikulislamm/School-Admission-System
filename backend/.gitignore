@@ -1,0 +1,35 @@
+# Build output
+bin/
+obj/
+out/
+publish/
+artifacts/
+
+# Test and coverage output
+TestResults/
+coverage/
+*.trx
+*.coverage
+*.coveragexml
+coverage.cobertura.xml
+
+# IDE and user files
+.vs/
+.idea/
+*.user
+*.suo
+*.userprefs
+*.DotSettings.user
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+appsettings.Local.json
+appsettings.*.local.json
+secrets.json
+
+# Logs and OS files
+*.log
+.DS_Store
+Thumbs.db

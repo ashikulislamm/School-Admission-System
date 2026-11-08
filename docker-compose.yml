@@ -1,0 +1,34 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-admission}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-admission}
+      POSTGRES_DB: ${POSTGRES_DB:-admission}
+    ports:
+      - "${DB_HOST_PORT:-5433}:5432" # host 5433 avoids clashing with a local Postgres on 5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      # Defaults make a clean clone work with no .env file.
+      ConnectionStrings__Default: "Host=db;Port=5432;Database=${POSTGRES_DB:-admission};Username=${POSTGRES_USER:-admission};Password=${POSTGRES_PASSWORD:-admission}"
+      HOLD_DURATION_SECONDS: ${HOLD_DURATION_SECONDS:-600}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:3000}
+    ports:
+      - "8080:8080"
+
+volumes:
+  pgdata:

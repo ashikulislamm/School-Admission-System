@@ -3,7 +3,8 @@
 Project-wide memory. Area-specific notes: `backend/MEMORY.md`, `frontend/MEMORY.md`. Keep entries short and dated. Newest first within each section.
 
 ## Status
-- Phase: 0 (not started). Repo initialized, no commits. Branch `master` → rename to `main`.
+- Phase: 0 and backend foundation done (config, errors, EF model + `Initial` migration, /health, Dockerfile, compose). Verified inside Docker by the user. Next: Phase 1 endpoints.
+- The user makes all git commits (see Claude memory). Branch is still `master` until the user renames it.
 - Today: 2026-11-08. Deadline: 2026-11-11 23:59:59.
 
 ## Decisions
@@ -30,7 +31,10 @@ Project-wide memory. Area-specific notes: `backend/MEMORY.md`, `frontend/MEMORY.
 - Assignment PDF is confidential: never commit it.
 
 ## AI mistakes log (feeds AI_USAGE.md)
-_None recorded yet. Format: what was wrong → how it was caught → fix. Real events only._
+Format: what was wrong → how it was caught → fix. Real events only.
+- 2026-11-08: AI wrote `ConnectionStringHelper` using `NpgsqlConnectionStringBuilder.ContainsKey("SSL Mode")` to detect an explicit SSL choice. The typed builder reports every keyword as present, so SSL would never have been forced for Neon/Supabase. → Caught by a unit test (4 failures) → Now inspects the raw string with `DbConnectionStringBuilder`.
+- 2026-11-08: AI used `HasCheckConstraint` on the entity builder; EF Core 10 marks it obsolete, and warnings-as-errors broke the build → compiler message → moved to `ToTable(t => t.HasCheckConstraint(...))`.
+- 2026-11-08: Test project resolved EF Core 10.0.4 while the API used 10.0.14 (Design package is private), causing MSB3277 warnings → seen in build output → pinned `Microsoft.EntityFrameworkCore` and `.Relational` 10.0.14 in the API project.
 
 ## Open questions
 - None.

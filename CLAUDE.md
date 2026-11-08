@@ -36,4 +36,4 @@ Frontend (runtime): `BACKEND_URL` → `window.__CONFIG__`.
 - Windows host: keep LF line endings for scripts.
 
 ## Workflow
-Follow `PHASES.md` in order. Small Conventional Commits. Update `PHASES.md` and the relevant `MEMORY.md` as you go. Never commit the assignment PDF. Ask before pushing.
+Follow `PHASES.md` in order. Update `PHASES.md` and the relevant `MEMORY.md` as you go. **Claude never commits or pushes; the user makes every commit.** Suggest a Conventional Commit message after each unit of work. Never commit the assignment PDF.

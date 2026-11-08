@@ -1,0 +1,11 @@
+**/bin/
+**/obj/
+**/TestResults/
+tests/
+.vs/
+.idea/
+.env
+.env.*
+*.md
+Dockerfile
+.dockerignore

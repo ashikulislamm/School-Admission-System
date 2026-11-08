@@ -34,6 +34,7 @@ Non-negotiable. If a rule must be broken, record why in `ASSUMPTIONS.md`.
 - No `console.log` in committed code.
 
 ## 4. Git
+- The user makes all commits; AI agents only suggest messages and never run `git commit`/`push`.
 - Commit small and often, Conventional Commits: `feat(api): …`, `fix(ui): …`, `test: …`, `docs: …`, `chore: …`.
 - One logical change per commit; the build must pass at every commit.
 - Default branch `main` (rename from `master`). No force-push to `main`.

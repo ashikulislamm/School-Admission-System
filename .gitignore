@@ -1,0 +1,23 @@
+# Dependencies and build output
+node_modules/
+dist/
+bin/
+obj/
+
+# IDE
+.vs/
+.vscode/
+.idea/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# Confidential assignment material, never commit
+*.pdf
+
+# OS and logs
+.DS_Store
+Thumbs.db
+*.log

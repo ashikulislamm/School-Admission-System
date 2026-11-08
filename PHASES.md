@@ -5,19 +5,19 @@ Deadline: **11 Nov 2026, 23:59:59**. Commit after every checked group. Update th
 Status legend: `[ ]` todo · `[x]` done
 
 ## Phase 0 — Foundation
-- [ ] `.gitignore`, `.gitattributes` (`* text=auto eol=lf`), exclude assignment PDF
-- [ ] Solution + project scaffolding (`backend/`, `frontend/`)
-- [ ] `docker-compose.yml` with db + healthcheck + volume
+- [x] `.gitignore`, `.gitattributes` (`* text=auto eol=lf`), exclude assignment PDF
+- [x] Solution + project scaffolding (`backend/`; `frontend/` still to do)
+- [x] `docker-compose.yml` with db + healthcheck + volume (verified: stack starts, /health ok, tables created)
 **Done when:** `docker compose up db` is healthy.
 
 ## Phase 1 — Backend core
-- [ ] EF model, migration, startup migrate with advisory lock + retry
-- [ ] Error model + global handler + validation helpers
+- [x] EF model, migration, startup migrate with retry (EF's own migration lock)
+- [x] Error model + global handler (validation helpers come with the endpoints)
 - [ ] `POST/GET /classes`, `GET /classes/{id}` with derived counts
 - [ ] `POST /classes/{id}/holds` (row lock algorithm)
 - [ ] `GET /holds/{id}` (effective status), `POST confirm`, `DELETE`, `GET /me/holds`
 - [ ] Expiry sweeper `BackgroundService`
-- [ ] CORS, env config (`HOLD_DURATION_SECONDS`)
+- [x] CORS, env config (`HOLD_DURATION_SECONDS`), `/health`, `DATABASE_URL`/`PORT` support
 **Done when:** all 8 endpoints match the contract by manual curl.
 
 ## Phase 2 — Backend tests
