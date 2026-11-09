@@ -3,7 +3,7 @@
 Project-wide memory. Area-specific notes: `backend/MEMORY.md`, `frontend/MEMORY.md`. Keep entries short and dated. Newest first within each section.
 
 ## Status
-- Phase: 0 and backend foundation done (config, errors, EF model + `Initial` migration, /health, Dockerfile, compose). Verified inside Docker by the user. Phase 1 (8 endpoints + sweeper) done 2026-11-09. Phases 0-3 done (backend complete, containerized, persistence verified). Next: Phase 4 frontend.
+- Phase: 0 and backend foundation done (config, errors, EF model + `Initial` migration, /health, Dockerfile, compose). Verified inside Docker by the user. Phase 1 (8 endpoints + sweeper) done 2026-11-09. Phases 0-3 done (backend complete, containerized, persistence verified). Phase 4 (frontend foundation) done 2026-11-09. Next: Phase 5 features.
 - The user makes all git commits (see Claude memory). Branch is still `master` until the user renames it.
 - Today: 2026-11-08. Deadline: 2026-11-11 23:59:59.
 

@@ -38,11 +38,11 @@ Status legend: `[ ]` todo · `[x]` done
 
 ## Phase 4 : Frontend foundation
 - [x] Next.js 16 scaffold (App Router, TS strict, Tailwind 4, standalone output) — initialized 2026-11-09
-- [ ] Add Radix + lucide-react + TanStack Query
-- [ ] Design tokens from `DESIGN.md` into Tailwind config / CSS variables
-- [ ] API client, `ApiError`, error-copy map, runtime config via root layout (`window.__CONFIG__`)
-- [ ] App shell: top bar with student-ID field (validated, persisted)
-**Done when:** shell renders; ID persists across reload.
+- [x] Add Radix + lucide-react + TanStack Query
+- [x] Design tokens from `DESIGN.md` into Tailwind config / CSS variables
+- [x] API client, `ApiError`, error-copy map, runtime config via root layout (`window.__CONFIG__`)
+- [x] App shell: top bar with student-ID field (validated, persisted)
+**Done when:** shell renders; ID persists across reload. (2026-11-09: build + lint clean, SSR HTML and runtime `BACKEND_URL` verified, ID persistence logic verified in Node. Still to eyeball in a real browser: `npm --prefix frontend run dev`.)
 
 ## Phase 5 : Frontend features
 - [ ] Class list with 3s polling, Apply

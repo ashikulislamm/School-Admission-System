@@ -79,6 +79,8 @@ public sealed class Api(AppFactory factory) : IDisposable
     public async Task<ClassDto> GetClassAsync(string id) =>
         (await _http.GetFromJsonAsync<ClassDto>($"/classes/{id}"))!;
 
+    public Task<HttpResponseMessage> SendRawAsync(HttpRequestMessage request) => _http.SendAsync(request);
+
     public Task<HttpResponseMessage> RawAsync(HttpMethod method, string url, string? student = null, HttpContent? body = null) =>
         Send(method, url, student, body);
 

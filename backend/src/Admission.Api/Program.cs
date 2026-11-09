@@ -34,7 +34,9 @@ builder.Services.AddProblemDetails();
 builder.Services.AddCors(o => o.AddDefaultPolicy(p => p
     .WithOrigins(settings.CorsOrigins)
     .AllowAnyHeader()
-    .AllowAnyMethod()));
+    .AllowAnyMethod()
+    // The UI derives its clock offset from the response Date header; browsers hide it cross-origin unless exposed.
+    .WithExposedHeaders("Date")));
 
 var app = builder.Build();
 

@@ -34,6 +34,7 @@ Notes for `backend/`. Read `ARCHITECTURE.md` §3–5 and `RULES.md` §1–2 firs
 - 2026-11-08: Cloud DB mode: use direct (non-pooled) connection; PgBouncer transaction mode can break session features.
 
 ## Gotchas
+- CORS exposes the `Date` response header (`WithExposedHeaders("Date")`); the UI needs it for the clock offset and browsers hide it cross-origin otherwise. Covered by `CorsTests`.
 - Interpolated SQL $"""..{x}""" turns every {x} into a bound parameter, so a SQL fragment constant must go through SqlQueryRaw with $$""" and {{Const}}. SqlQuery<scalar> needs the column aliased Value.
 - Use clock_timestamp(), not 
 ow(): 
