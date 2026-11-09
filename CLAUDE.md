@@ -3,7 +3,7 @@
 School Admission System — take-home for Onnorokom Projukti Limited. First-come-first-served seat holds with payment confirmation. Deadline **11 Nov 2026 23:59:59**.
 
 ## Stack
-.NET 8 minimal API + EF Core + PostgreSQL 16 · React 18 + Vite + TypeScript + Tailwind + TanStack Query · Docker Compose.
+.NET 8 minimal API + EF Core + PostgreSQL 16 · Next.js 16 (React 19, App Router) + TypeScript + Tailwind + TanStack Query · Docker Compose.
 
 ## Docs map
 @PRD.md — requirements and frozen API contract
@@ -20,13 +20,13 @@ docker compose up --build        # whole app; UI http://localhost:3000, API http
 docker compose down              # keeps data (named volume); add -v to wipe
 dotnet test backend              # needs Docker running (Testcontainers)
 dotnet run --project backend/src/Admission.Api
-npm --prefix frontend run dev    # Vite dev server
+npm --prefix frontend run dev    # Next dev server
 npm --prefix frontend test       # Vitest
 ```
 
 ## Env vars
 Backend: `ConnectionStrings__Default`, `HOLD_DURATION_SECONDS` (default 600), `CORS_ORIGINS`.
-Frontend (runtime): `BACKEND_URL` → `window.__CONFIG__`.
+Frontend (runtime): `BACKEND_URL`, read by the root layout at request time → `window.__CONFIG__`.
 
 ## Critical rules (full list in RULES.md)
 - `held + confirmed ≤ totalSeats` enforced under a class-row `FOR UPDATE` lock; counts derived, never stored.

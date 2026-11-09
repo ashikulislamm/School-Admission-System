@@ -27,7 +27,8 @@ Non-negotiable. If a rule must be broken, record why in `ASSUMPTIONS.md`.
 - Server state via TanStack Query only; no duplicated copies in `useState`.
 - All user-facing strings for errors come from `lib/errors.ts`; never render raw server/JS messages.
 - UI is never the authority: disable controls for UX, but always handle the server's 409/403.
-- No hard-coded backend URL; read `window.__CONFIG__.BACKEND_URL`, fallback `http://localhost:8080`.
+- No hard-coded backend URL; read `window.__CONFIG__.BACKEND_URL`, fallback `http://localhost:8080`. Never use `NEXT_PUBLIC_*` for it (build-time).
+- Next.js: pages that use hooks, state or browser APIs are `"use client"`; read `node_modules/next/dist/docs/` before using a Next API.
 - Every async view has loading, empty, and error states.
 - Follow `DESIGN.md` exactly. No new colors, radii, shadows or fonts outside the tokens.
 - Accessible: semantic HTML, labelled inputs, visible focus, keyboard operable, `aria-live` for errors and countdown changes.
@@ -51,7 +52,7 @@ Non-negotiable. If a rule must be broken, record why in `ASSUMPTIONS.md`.
 - `docker compose up` on a clean clone must work with only Docker installed.
 - Named volume for Postgres; never use anonymous volumes.
 - Shell scripts use LF endings.
-- Images pinned to major tags (`postgres:16-alpine`, `dotnet/aspnet:8.0`, `node:20-alpine`, `nginx:1.27-alpine`).
+- Images pinned to major tags (`postgres:16-alpine`, `dotnet/aspnet:8.0`, `node:22-alpine`).
 
 ## 7. Documentation
 - Update the relevant `MEMORY.md` after any non-obvious decision, gotcha, or fix.

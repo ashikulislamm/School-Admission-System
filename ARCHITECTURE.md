@@ -3,7 +3,7 @@
 ## 1. Overview
 ```
 Browser ──(JSON, X-Student-Id)──► Backend :8080 ──► PostgreSQL (named volume)
- React SPA served by nginx :3000      ASP.NET Core 8        all state lives here
+ Next.js server (standalone) :3000      ASP.NET Core 8        all state lives here
 ```
 The backend is stateless: no in-memory locks, caches or counters. That is what makes multi-process safety work.
 
@@ -15,8 +15,8 @@ The backend is stateless: no in-memory locks, caches or counters. That is what m
     tests/Admission.Tests/    xUnit + Testcontainers
     Dockerfile  MEMORY.md
   frontend/
-    src/ api/ components/ features/ hooks/ lib/ pages/
-    docker/entrypoint.sh  nginx.conf  Dockerfile  MEMORY.md
+    src/ app/ (routes) api/ components/ features/ hooks/ lib/
+    next.config.ts  Dockerfile  MEMORY.md
   docker-compose.yml
   *.md (PRD, ARCHITECTURE, PHASES, RULES, DESIGN, AGENT, CLAUDE, MEMORY, README, ASSUMPTIONS, AI_USAGE)
   .gitattributes  (eol=lf)
@@ -66,12 +66,13 @@ not owner → 403 · CONFIRMED → 200 (no-op) · HELD and `expires_at > now()` 
 **Why this satisfies the bonus:** every decision happens inside a Postgres row lock on the class; no process-local state is consulted.
 
 ## 6. Frontend
-- React 18, Vite, TypeScript, Tailwind CSS, Radix primitives, lucide-react, TanStack Query, React Router.
+- Next.js 16 (App Router, `output: "standalone"`), React 19, TypeScript, Tailwind CSS 4, Radix primitives, lucide-react, TanStack Query. Next provides routing, build and the Node server only: every page is a client component (`"use client"`), so the UI behaves as a SPA. `cacheComponents` is off (hidden-route state retention is unwanted).
+- Before writing Next code, read the bundled docs in `frontend/node_modules/next/dist/docs/` (this Next version differs from older releases).
 - Server state only via TanStack Query. Client state: student ID (`localStorage`), nothing else global.
 - Polling: classes 3s, open hold 3s, my holds 5s; pause on hidden tab.
 - Countdown: derived from server `expiresAt` + measured clock offset (from response `Date` header). At zero → render EXPIRED locally, disable Pay, invalidate query.
 - Errors: `api/client.ts` throws typed `ApiError{status,code,message}`; `lib/errors.ts` maps code → user copy. Network failure → "server unreachable". Root error boundary.
-- Runtime config: container entrypoint writes `/config.js` (`window.__CONFIG__ = { BACKEND_URL }`) from env; no rebuild needed.
+- Runtime config: the root layout is a server component that calls `await connection()` and renders `<script>window.__CONFIG__ = { BACKEND_URL }</script>` from `process.env.BACKEND_URL`; no rebuild needed. `NEXT_PUBLIC_*` is never used (inlined at build).
 
 ### Routes
 `/` classes · `/applications` my applications · `/applications/:holdId` detail · `/admin` create class.
@@ -81,7 +82,7 @@ not owner → 403 · CONFIRMED → 200 (no-op) · HELD and `expires_at > now()` 
 |---|---|---|---|
 | db | postgres:16-alpine | – | volume `pgdata`, `pg_isready` healthcheck |
 | backend | multi-stage dotnet sdk→aspnet | 8080 | `depends_on: db (healthy)` |
-| frontend | node build → nginx | 3000→80 | SPA fallback, entrypoint writes config.js |
+| frontend | node build → `node:22-alpine` standalone | 3000 | `node server.js`; `BACKEND_URL` read at request time |
 Optional `docker-compose.multi.yml` adds `backend2` on 8081 for the multi-process demo.
 
 ## 8. Testing strategy
@@ -95,4 +96,4 @@ Optional `docker-compose.multi.yml` adds `backend2` on 8081 for the multi-proces
 | Row lock on class, Read Committed | Simple, provably correct, multi-process safe |
 | Lazy expiry + sweeper | Seat returns exactly at expiry regardless of sweeper timing |
 | DB clock | No cross-process skew |
-| Runtime `config.js` | Env-configurable backend URL without rebuild |
+| Next.js standalone, runtime env in root layout | Env-configurable backend URL without rebuild; no nginx or entrypoint script |

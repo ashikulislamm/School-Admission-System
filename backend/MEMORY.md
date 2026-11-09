@@ -1,15 +1,15 @@
-# MEMORY Ã¢â‚¬â€ backend
+# MEMORY — backend
 
-Notes for `backend/`. Read `ARCHITECTURE.md` Ã‚Â§3Ã¢â‚¬â€œ5 and `RULES.md` Ã‚Â§1Ã¢â‚¬â€œ2 first. Keep entries short and dated.
+Notes for `backend/`. Read `ARCHITECTURE.md` §3–5 and `RULES.md` §1–2 first. Keep entries short and dated.
 
 ## Status
 - Foundation done (2026-11-08): config, error handling, EF model + `Initial` migration, startup migrate with retry, `/health`, Dockerfile, compose, 14 unit tests passing.
 - Verified in Docker (user-confirmed 2026-11-08): `docker compose up -d --build` works, `/health` returns ok, tables exist.
-- Phase 1 done (2026-11-09): all 8 endpoints + sweeper, smoke-tested with curl. Phase 2 done: 56 tests green x5. Next: Phase 3 (backend container check).
+- Phase 1 done (2026-11-09): all 8 endpoints + sweeper, smoke-tested with curl. Phase 2 done: 56 tests green x5. Phase 3 done: image rebuilt, API verified in compose, data persists across down/up. Next: Phase 4 (frontend).
 
 ## Layout (`src/Admission.Api`)
 - `Configuration/` `AppSettings` (validated env config), `ConnectionStringHelper` (URL or key-value, SSL for cloud hosts), `DotEnv` (dev-only .env loader).
-- `Errors/` `ApiException` + `ErrorCodes` + `GlobalExceptionHandler` (all exceptions Ã¢â€ â€™ `{code,message}`).
+- `Errors/` `ApiException` + `ErrorCodes` + `GlobalExceptionHandler` (all exceptions → `{code,message}`).
 - `Models/` `ClassEntity`, `Hold`, `HoldStatus`. `Data/` `AppDbContext`, `DatabaseInitializer`, `DesignTimeDbContextFactory`, `Migrations/`.
 - `Endpoints/` `HealthEndpoints`, `AdmissionEndpoints` (all 8 routes). `Services/` `ClassService`, `HoldService` (locking rules), `ExpirySweeper`, `Validation`. DTOs in `Models/Dtos.cs`.
 
@@ -22,14 +22,15 @@ Notes for `backend/`. Read `ARCHITECTURE.md` Ã‚Â§3Ã¢â‚¬â€œ5 and `
 - Error codes: `INVALID_INPUT`, `INVALID_STUDENT_ID`, `NOT_FOUND`, `NOT_OWNER`, `CLASS_FULL`, `ALREADY_APPLIED`, `HOLD_EXPIRED`, `HOLD_NOT_ACTIVE`, `METHOD_NOT_ALLOWED`, `SERVICE_UNAVAILABLE`, `INTERNAL_ERROR`.
 
 ## Algorithms (summary)
-- Apply: lock class row Ã¢â€ â€™ expire this student's lapsed holds Ã¢â€ â€™ duplicate check Ã¢â€ â€™ count active Ã¢â€ â€™ insert with `now() + duration`.
-- Confirm: lock hold row Ã¢â€ â€™ owner? Ã¢â€ â€™ CONFIRMED no-op / HELD&unexpired Ã¢â€ â€™ CONFIRMED / else 409.
-- Cancel: lock hold row Ã¢â€ â€™ owner Ã¢â€ â€™ HELDÃ¢â€ â€™CANCELLED; CANCELLED/EXPIRED no-op 204; CONFIRMED 409.
+- Apply: lock class row → expire this student's lapsed holds → duplicate check → count active → insert with `now() + duration`.
+- Confirm: lock hold row → owner? → CONFIRMED no-op / HELD&unexpired → CONFIRMED / else 409.
+- Cancel: lock hold row → owner → HELD→CANCELLED; CANCELLED/EXPIRED no-op 204; CONFIRMED 409.
 - Lock order: class then hold. Effective status: `HELD` with `expires_at <= now()` is reported `EXPIRED`.
 
 ## Decisions
+- 2026-11-09: Images are .NET 10 (sdk:10.0 / aspnet:10.0) to match net10.0 target; RULES.md still says 8.0, which would not run this build. Runs as non-root (USER $APP_UID).
 - 2026-11-08: Schema uses snake_case columns set explicitly (no naming-convention package).
-- 2026-11-08: Migrations run at startup with retry (30Ãƒâ€”2s); EF Core's own migration lock covers two processes.
+- 2026-11-08: Migrations run at startup with retry (30×2s); EF Core's own migration lock covers two processes.
 - 2026-11-08: Cloud DB mode: use direct (non-pooled) connection; PgBouncer transaction mode can break session features.
 
 ## Gotchas
