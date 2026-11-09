@@ -54,5 +54,10 @@ Notes for `frontend/`. Read `DESIGN.md`, `ARCHITECTURE.md` §6 and `RULES.md` §
 - 2026-11-09: Apply buttons in the class table are secondary so each view keeps one primary button. Hold detail shows the student ID typed in the top bar (`GET /holds/{id}` does not return the owner).
 - 2026-11-09: When the local countdown hits 0 while the server still says HELD, the detail page invalidates hold/classes/myHolds once; the displayed status is EXPIRED and Pay disabled meanwhile.
 
+- 2026-11-09: Phase 6 files written: `frontend/Dockerfile` (deps, build, runtime; copies `.next/standalone` and `.next/static`, no `public/` copy because the dir is empty and git does not track empty dirs), `frontend/.dockerignore`, `frontend` service in compose (`BACKEND_URL` default `http://localhost:8080` because the browser, not the container, calls the API). `next/font/google` needs internet at image build time. A stray `frontend/frontend/package-lock.json` exists from the scaffold (excluded from the image; safe to delete).
+
+- 2026-11-09: Phase 7 tests: Vitest 3 + jsdom + React Testing Library + MSW (`vitest.config.ts`, helpers in `src/test/`). Run `npm --prefix frontend test`. 33 tests: `lib/hold`, `lib/errors`, `lib/student-id`, class list/apply flow, application detail (live expiry, pay, refused pay, no ID).
+- Test gotchas: fake only `Date`/`setInterval`/`clearInterval` so MSW and `waitFor` keep real timeouts; a page using `use(params)` suspends forever under faked `Date`, so tests pass a promise already marked `status: "fulfilled"`; page props need `searchParams` too (`next build` type-checks test files); skip `@vitejs/plugin-react` (use esbuild `jsx: "automatic"`).
+
 ## Open items
 _None._

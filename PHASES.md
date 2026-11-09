@@ -54,16 +54,19 @@ Status legend: `[ ]` todo · `[x]` done
 **Done when:** U1–U5 verified manually in the browser. (2026-11-09: all features implemented; type check, lint and build clean, all routes return 200. Still to eyeball in a real browser against the running backend.)
 
 ## Phase 6 : Frontend container + integration
-- [ ] Next standalone Dockerfile (`node:22-alpine`), `BACKEND_URL` read at request time
-- [ ] Full `docker compose up` from a clean clone
-- [ ] Two-tab and expiry walkthrough with `HOLD_DURATION_SECONDS=20`
+- [x] Next standalone Dockerfile (`node:22-alpine`), `BACKEND_URL` read at request time (frontend service added to compose; standalone server verified locally with a runtime `BACKEND_URL`; image build itself still to run with Docker)
+- [x] Full `docker compose up` from a clean clone (2026-11-09: `docker compose up --build` verified on the working tree: 3 containers healthy, UI 200 with runtime `BACKEND_URL`, CORS preflight from :3000 ok, hold 20s, full class 409, confirm idempotent. Clean-clone run still pending.)
+- [x] Two-tab and expiry walkthrough with `HOLD_DURATION_SECONDS=20` (confirmed done by the user 2026-11-09)
 
 ## Phase 7 : Frontend tests (bonus)
-- [ ] Countdown → EXPIRED disables Pay
-- [ ] Error mapping, ID validation, apply flow (MSW)
+- [x] Countdown → EXPIRED disables Pay
+- [x] Error mapping, ID validation, apply flow (MSW)
+**Done when:** `npm --prefix frontend test` green. (2026-11-09: 33 tests in 5 files, stable over 3 runs; breaking `effectiveStatus` on purpose fails the unit and UI expiry tests.)
 
 ## Phase 8 : Docs & release
 - [ ] `README.md` (run, URLs, tests), `ASSUMPTIONS.md` (incl. multi-process explanation), `AI_USAGE.md` (real mistakes only)
 - [ ] Final clean-clone test on a fresh directory
 - [ ] Public GitHub repo, push, submit link at https://q-rp.com/c/4CXx
 - [ ] Verify nothing is pushed after the deadline
+
+
