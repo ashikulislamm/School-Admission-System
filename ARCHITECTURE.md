@@ -3,7 +3,7 @@
 ## 1. Overview
 ```
 Browser ──(JSON, X-Student-Id)──► Backend :8080 ──► PostgreSQL (named volume)
- Next.js server (standalone) :3000      ASP.NET Core 8        all state lives here
+ Next.js server (standalone) :3000      ASP.NET Core 10       all state lives here
 ```
 The backend is stateless: no in-memory locks, caches or counters. That is what makes multi-process safety work.
 
@@ -23,12 +23,12 @@ The backend is stateless: no in-memory locks, caches or counters. That is what m
 ```
 
 ## 3. Backend
-- .NET 8 minimal API, EF Core + Npgsql. Raw SQL only for `FOR UPDATE` and the sweeper.
+- .NET 10 minimal API, EF Core 10 + Npgsql. Raw SQL only for `FOR UPDATE` and the sweeper.
 - Layers: `Endpoints` (HTTP mapping, validation) → `Services` (transactions, rules) → `Data` (DbContext).
 - Global exception handler → ProblemDetails with stable `code` + `message`.
-- CORS: allow the frontend origin (configurable).
+- CORS: allow the frontend origin (configurable); expose the `Date` response header (the UI derives its clock offset from it).
 - Config: `ConnectionStrings__Default`, `HOLD_DURATION_SECONDS`, `CORS_ORIGINS`, `ASPNETCORE_URLS=http://+:8080`.
-- Startup: apply migrations under a Postgres advisory lock, with retry until DB is ready.
+- Startup: apply EF migrations (EF Core takes its own database lock, so two processes are safe), with retry until DB is ready.
 
 ## 4. Data model
 ```
@@ -55,7 +55,7 @@ not owner → 403 · CONFIRMED → 200 (no-op) · HELD and `expires_at > now()` 
 
 **Cancel** — lock row; owner only; HELD → CANCELLED (204); CANCELLED → 204 (idempotent); EXPIRED → 204 no-op; CONFIRMED → 409.
 
-**Clock** — always the DB `now()`. App clocks are never used for expiry decisions.
+**Clock** — always the DB clock. App clocks are never used for expiry decisions. The code uses `clock_timestamp()` wherever this document says `now()`, because `now()` is frozen at transaction start and goes stale after waiting on a lock.
 
 **Expiry — two layers**
 1. *Lazy (correctness):* "active" is evaluated against `expires_at > now()` in every count and read. Effective status of a lapsed `HELD` row is reported as `EXPIRED` even before it is persisted.

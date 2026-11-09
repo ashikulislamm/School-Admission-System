@@ -19,9 +19,9 @@ export function TopBar() {
   const pathname = usePathname();
 
   return (
-    <header className="border-b border-line bg-surface">
+    <header className="border-b border-line bg-surface shadow-card">
       <div className="mx-auto flex min-h-14 w-full max-w-[1040px] flex-wrap items-center gap-x-6 px-4 sm:px-6">
-        <Link href="/" className="text-section text-fg">
+        <Link href="/" className="text-section font-bold text-accent">
           Admissions
         </Link>
         <nav aria-label="Main" className="-mb-px flex h-14 max-sm:order-last max-sm:w-full max-sm:overflow-x-auto sm:flex-1">
@@ -33,7 +33,7 @@ export function TopBar() {
                 href={href}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "flex h-full items-center border-b-2 px-3 text-body font-medium whitespace-nowrap",
+                  "flex h-full items-center border-b-2 px-4 text-body font-medium whitespace-nowrap",
                   active ? "border-accent text-fg" : "border-transparent text-muted hover:text-fg",
                 )}
               >

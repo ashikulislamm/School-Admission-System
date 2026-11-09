@@ -3,6 +3,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState, type ReactNode } from "react";
 import { ApiError } from "@/api/client";
+import { ToastProvider } from "@/components/ui/Toast";
 
 // Retry only when the server could not be reached or failed; a 4xx will not change on retry.
 function shouldRetry(failureCount: number, error: unknown): boolean {
@@ -25,5 +26,9 @@ export function Providers({ children }: { children: ReactNode }) {
       }),
   );
 
-  return <QueryClientProvider client={client}>{children}</QueryClientProvider>;
+  return (
+    <QueryClientProvider client={client}>
+      <ToastProvider>{children}</ToastProvider>
+    </QueryClientProvider>
+  );
 }

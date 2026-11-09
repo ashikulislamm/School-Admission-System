@@ -23,7 +23,7 @@ A real application UI: sleek, modern, clean, professional. It looks like a produ
 Light:
 | Token | Value | Use |
 |---|---|---|
-| `--bg` | `#FAFAFA` | App background |
+| `--bg` | `#F1F5F9` | App background (soft slate) |
 | `--surface` | `#FFFFFF` | Panels, tables, inputs |
 | `--border` | `#E5E7EB` | Dividers, outlines |
 | `--border-strong` | `#D1D5DB` | Input outlines, hover |
@@ -35,10 +35,9 @@ Light:
 | `--warning` | `#B45309` | HELD text, low-time |
 | `--danger` | `#B91C1C` | Errors, destructive text |
 | `--neutral` | `#6B7280` | EXPIRED / CANCELLED text |
-| `--row-hover` | `#F3F4F6` | Table row hover |
+| `--row-hover` | `#E8EDF4` | Table row hover |
 
-Dark (`prefers-color-scheme: dark`):
-`--bg #0B0D10` · `--surface #111418` · `--border #1F242B` · `--border-strong #2B323B` · `--text #E6E8EB` · `--text-muted #8B949E` · `--accent #3B82F6` · `--accent-hover #60A5FA` · `--success #4ADE80` · `--warning #FBBF24` · `--danger #F87171` · `--neutral #8B949E` · `--row-hover #161A20`.
+Light theme only (decision 2026-11-09: no dark mode; `color-scheme: light`).
 
 Text contrast ≥ 4.5:1 on its surface.
 
@@ -144,3 +143,11 @@ Only 120ms opacity/color transitions on hover/focus and dialog fade. Respect `pr
 - Tailwind CSS with tokens mapped to the CSS variables above; Radix primitives (Dialog, Toast) for behavior; lucide-react only for functional icons (e.g., close), sized 16px, stroke 1.75.
 - Shared primitives in `frontend/src/components/ui/` (Button, Input, Table, Alert, Dialog, StatusText, Countdown). Features compose these; no one-off styled elements.
 - A PR/commit that adds a color, radius, shadow, or font not listed here is rejected.
+
+## 13. Polish revision (2026-11-09, user request)
+Applied on top of the rules above; hard bans (gradients, badges, emoji, one accent) still hold.
+- Radius: controls 8px, cards/dialogs/toasts 12px. Progress bar fill and track are fully rounded.
+- Elevation: cards, table panels, top bar and buttons use `--shadow-card` (hairline, neutral). Overlays use a slightly larger neutral shadow.
+- Tables and forms sit inside white cards on the soft `--bg`; table header row uses `--bg`; body rows 64px.
+- Page title 24/32; brand name in `--accent`; inputs 40px high.
+- Empty and loading states are centered inside a card.

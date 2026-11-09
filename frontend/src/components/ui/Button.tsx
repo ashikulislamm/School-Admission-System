@@ -1,7 +1,7 @@
 import type { ButtonHTMLAttributes } from "react";
 import { cn } from "@/lib/cn";
 
-type Variant = "primary" | "secondary" | "destructive";
+export type Variant ="primary" | "secondary" | "destructive";
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: Variant;
@@ -11,10 +11,18 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const VARIANTS: Record<Variant, string> = {
-  primary: "bg-accent text-on-accent border border-transparent enabled:hover:bg-accent-hover",
-  secondary: "bg-surface text-fg border border-line-strong enabled:hover:bg-row-hover",
-  destructive: "bg-surface text-danger border border-line-strong enabled:hover:bg-row-hover",
+  primary: "bg-accent text-on-accent border border-transparent shadow-card enabled:hover:bg-accent-hover",
+  secondary: "bg-surface text-fg border border-line-strong shadow-card enabled:hover:bg-row-hover",
+  destructive: "bg-surface text-danger border border-line-strong shadow-card enabled:hover:bg-row-hover",
 };
+
+/** Class string shared with ButtonLink so links styled as buttons look identical. */
+export function buttonClass(variant: Variant): string {
+  return cn(
+    "relative inline-flex h-9 items-center justify-center rounded-control px-3.5 text-body font-medium",
+    VARIANTS[variant],
+  );
+}
 
 export function Button({
   variant = "primary",
@@ -33,8 +41,7 @@ export function Button({
       disabled={inactive}
       aria-busy={loading || undefined}
       className={cn(
-        "relative inline-flex h-9 items-center justify-center rounded-control px-3.5 text-body font-medium",
-        VARIANTS[variant],
+        buttonClass(variant),
         inactive && "cursor-not-allowed opacity-50",
         className,
       )}

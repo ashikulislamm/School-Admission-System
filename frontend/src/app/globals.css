@@ -2,8 +2,8 @@
 
 /* Design tokens: DESIGN.md section 3. Nothing outside these tokens is allowed. */
 :root {
-  color-scheme: light dark;
-  --bg: #fafafa;
+  color-scheme: light;
+  --bg: #f1f5f9;
   --surface: #ffffff;
   --border: #e5e7eb;
   --border-strong: #d1d5db;
@@ -15,25 +15,7 @@
   --warning: #b45309;
   --danger: #b91c1c;
   --neutral: #6b7280;
-  --row-hover: #f3f4f6;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #0b0d10;
-    --surface: #111418;
-    --border: #1f242b;
-    --border-strong: #2b323b;
-    --text: #e6e8eb;
-    --text-muted: #8b949e;
-    --accent: #3b82f6;
-    --accent-hover: #60a5fa;
-    --success: #4ade80;
-    --warning: #fbbf24;
-    --danger: #f87171;
-    --neutral: #8b949e;
-    --row-hover: #161a20;
-  }
+  --row-hover: #e8edf4;
 }
 
 /* Drop the default Tailwind palette, radii, shadows and type scale so only tokens exist. */
@@ -63,12 +45,14 @@
 
   --font-sans: var(--font-inter), system-ui, -apple-system, "Segoe UI", sans-serif;
 
-  --radius-control: 6px;
-  --shadow-overlay: 0 8px 24px rgba(0, 0, 0, 0.08);
+  --radius-control: 8px;
+  --radius-card: 12px;
+  --shadow-card: 0 1px 2px rgba(16, 24, 40, 0.06), 0 1px 3px rgba(16, 24, 40, 0.04);
+  --shadow-overlay: 0 12px 32px rgba(16, 24, 40, 0.12);
 
   /* DESIGN.md section 4 */
-  --text-title: 20px;
-  --text-title--line-height: 28px;
+  --text-title: 24px;
+  --text-title--line-height: 32px;
   --text-title--font-weight: 600;
   --text-section: 16px;
   --text-section--line-height: 24px;
@@ -90,6 +74,7 @@ body {
   font-family: var(--font-inter), system-ui, -apple-system, "Segoe UI", sans-serif;
   font-size: 14px;
   line-height: 20px;
+  -webkit-font-smoothing: antialiased;
 }
 
 /* Visible focus ring everywhere (DESIGN.md sections 7 and 11). */

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { connection } from "next/server";
+import { ServerStatus } from "@/components/ServerStatus";
 import { TopBar } from "@/components/TopBar";
 import { Providers } from "./providers";
 import "./globals.css";
@@ -29,7 +30,10 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-screen bg-bg font-sans text-body text-fg">
         <Providers>
           <TopBar />
-          <main className="mx-auto w-full max-w-[1040px] px-4 py-6 sm:px-6">{children}</main>
+          <main className="mx-auto w-full max-w-[1040px] px-4 py-6 sm:px-6">
+            <ServerStatus />
+            {children}
+          </main>
         </Providers>
       </body>
     </html>

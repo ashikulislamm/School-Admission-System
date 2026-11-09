@@ -5,7 +5,7 @@ Non-negotiable. If a rule must be broken, record why in `ASSUMPTIONS.md`.
 ## 1. Invariants (never violate)
 1. `held + confirmed ≤ totalSeats`, always. Enforced inside a DB row lock, never by app-side checks alone.
 2. Seat counts are derived from `holds`; no stored counters.
-3. Expiry decisions use the DB clock (`now()`); never `DateTime.UtcNow` for business logic.
+3. Expiry decisions use the DB clock (`clock_timestamp()`; `now()` is stale inside a long transaction); never `DateTime.UtcNow` for business logic.
 4. The backend holds no state in memory that affects correctness.
 5. No input may produce a 500. Validate, then return 4xx.
 6. The API contract in `PRD.md` §6 is frozen. Add fields freely; never remove or rename.
@@ -52,7 +52,7 @@ Non-negotiable. If a rule must be broken, record why in `ASSUMPTIONS.md`.
 - `docker compose up` on a clean clone must work with only Docker installed.
 - Named volume for Postgres; never use anonymous volumes.
 - Shell scripts use LF endings.
-- Images pinned to major tags (`postgres:16-alpine`, `dotnet/aspnet:8.0`, `node:22-alpine`).
+- Images pinned to major tags (`postgres:16-alpine`, `dotnet/aspnet:10.0`, `node:22-alpine`).
 
 ## 7. Documentation
 - Update the relevant `MEMORY.md` after any non-obvious decision, gotcha, or fix.

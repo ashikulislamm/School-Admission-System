@@ -6,6 +6,9 @@ export const UNREACHABLE_COPY = "Can't reach the server. Retrying.";
 export const UNKNOWN_COPY = "Something went wrong. Try again.";
 export const INVALID_STUDENT_ID_COPY = "Enter a 17-digit birth registration number.";
 
+export const NAME_INVALID_COPY = "Enter a class name of 1 to 100 characters.";
+export const SEATS_INVALID_COPY = "Enter a whole number from 1 to 100000.";
+
 const COPY: Record<string, string> = {
   CLASS_FULL: "All seats in this class are taken.",
   HOLD_EXPIRED: "This application has expired.",

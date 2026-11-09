@@ -3,16 +3,16 @@
 Project-wide memory. Area-specific notes: `backend/MEMORY.md`, `frontend/MEMORY.md`. Keep entries short and dated. Newest first within each section.
 
 ## Status
-- Phase: 0 and backend foundation done (config, errors, EF model + `Initial` migration, /health, Dockerfile, compose). Verified inside Docker by the user. Phase 1 (8 endpoints + sweeper) done 2026-11-09. Phases 0-3 done (backend complete, containerized, persistence verified). Phase 4 (frontend foundation) done 2026-11-09. Next: Phase 5 features.
+- Phase: 0 and backend foundation done (config, errors, EF model + `Initial` migration, /health, Dockerfile, compose). Verified inside Docker by the user. Phase 1 (8 endpoints + sweeper) done 2026-11-09. Phases 0-3 done (backend complete, containerized, persistence verified). Phase 4 (frontend foundation) done 2026-11-09. Phase 5 (frontend features) code done 2026-11-09; browser walkthrough of U1-U5 pending. Next: Phase 6.
 - The user makes all git commits (see Claude memory). Branch is still `master` until the user renames it.
-- Today: 2026-11-08. Deadline: 2026-11-11 23:59:59.
+- Last updated: 2026-11-09. Deadline: 2026-11-11 23:59:59.
 
 ## Decisions
 | Date | Decision | Why |
 |---|---|---|
 | 2026-11-08 | Counts derived from `holds`, row lock on class | Single source of truth, multi-process safe |
 | 2026-11-08 | Lazy expiry + background sweeper | Seat frees exactly at expiry with no API call |
-| 2026-11-08 | DB clock for all expiry logic | Avoid process clock skew |
+| 2026-11-08 | DB clock for all expiry logic (`clock_timestamp()`, not `now()`, since 2026-11-09) | Avoid process clock skew; `now()` is stale after waiting on a lock |
 | 2026-11-08 | Confirm expired → 409; cancel confirmed → 409; not owner → 403 | Consistent semantics; document in ASSUMPTIONS |
 | 2026-11-09 | Frontend is Next.js 16 (App Router, standalone), not Vite; `BACKEND_URL` injected by root layout at request time | User choice; still React; one image, any backend URL; drops nginx + entrypoint script |
 | 2026-11-08 | Tailwind + Radix + lucide, no heavy UI kit | Full control for the minimal DESIGN.md look |

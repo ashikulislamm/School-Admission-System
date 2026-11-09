@@ -45,13 +45,13 @@ Status legend: `[ ]` todo · `[x]` done
 **Done when:** shell renders; ID persists across reload. (2026-11-09: build + lint clean, SSR HTML and runtime `BACKEND_URL` verified, ID persistence logic verified in Node. Still to eyeball in a real browser: `npm --prefix frontend run dev`.)
 
 ## Phase 5 : Frontend features
-- [ ] Class list with 3s polling, Apply
-- [ ] Application detail: status, countdown, Pay, Cancel, live EXPIRED
-- [ ] My applications
-- [ ] Admin: create class
-- [ ] Empty / loading / error states everywhere
-- [ ] Error boundary, offline/server-down handling
-**Done when:** U1–U5 verified manually in the browser.
+- [x] Class list with 3s polling, Apply
+- [x] Application detail: status, countdown, Pay, Cancel, live EXPIRED
+- [x] My applications
+- [x] Admin: create class
+- [x] Empty / loading / error states everywhere
+- [x] Error boundary, offline/server-down handling
+**Done when:** U1–U5 verified manually in the browser. (2026-11-09: all features implemented; type check, lint and build clean, all routes return 200. Still to eyeball in a real browser against the running backend.)
 
 ## Phase 6 : Frontend container + integration
 - [ ] Next standalone Dockerfile (`node:22-alpine`), `BACKEND_URL` read at request time

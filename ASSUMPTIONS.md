@@ -9,13 +9,15 @@ Where the spec is not explicit, this is what I assumed and why.
 | `X-Student-Id` is required for apply, confirm, cancel and `/me/holds`. Class endpoints and `GET /holds/{id}` do not need it. | The brief lists the header only on those endpoints. |
 | Class name is trimmed and must be 1–100 characters. Names need not be unique. | Shift names can legitimately repeat across years, and the brief has no uniqueness rule. |
 | `totalSeats` must be an integer from 1 to 100000. | Zero or negative seats make no sense. The upper bound stops absurd input. |
-| Malformed JSON or a wrong field type returns `400`. An unknown or malformed id returns `404`. | Rule 7: invalid input is always 4xx, never 500. |
+| Malformed JSON or a wrong field type returns `400`; numbers are strict, so `"totalSeats": "5"` and `5.5` are rejected. An unknown or malformed id returns `404`. | Rule 7: invalid input is always 4xx, never 500. |
+| Class names containing control characters are rejected with `400`. | They cannot be stored safely in PostgreSQL text and have no legitimate use. |
 
 ## Hold lifecycle
 | Assumption | Why |
 |---|---|
 | A seat counts as held only while `status = HELD` and `expiresAt` is in the future. | The seat must return automatically at expiry, with no API call. |
 | Expiry is decided with the database clock, not the application clock. | Two backend processes with different clocks must agree. |
+| The database clock is read with `clock_timestamp()`, not `now()`. (Deviation from the wording of rule 3.) | `now()` is frozen at transaction start, so it goes stale after waiting on the class lock. `clock_timestamp()` is still the database clock. |
 | A student may apply again after a `CANCELLED` or `EXPIRED` application in the same class. | Rule 3 forbids only active or confirmed duplicates. |
 | A duplicate active application returns `409`. | It is a state conflict, not bad input. |
 | Confirming an expired or cancelled hold returns `409`. | The request is valid but the hold is in the wrong state. |
@@ -39,19 +41,19 @@ Where the spec is not explicit, this is what I assumed and why.
 | IDs look like `c_` or `h_` plus 12 random URL-safe characters. | The brief says the ID format is my choice. |
 | Timestamps are UTC ISO-8601 ending in `Z`. | Matches the examples. |
 | Errors return `{ "code": "...", "message": "..." }`. | A stable code for the UI and a readable message for people. |
-| CORS allows the frontend origin from config. | The browser calls the backend on a different port. |
+| CORS allows the frontend origin from config and exposes the `Date` response header. | The browser calls the backend on a different port, and the UI reads `Date` to correct its countdown. |
 
 ## Platform
 | Assumption | Why |
 |---|---|
 | The backend targets .NET 10 (the brief allows ".NET 8 or newer"). | It is the installed LTS SDK, and it avoids needing a second runtime. |
-| The frontend is served at `http://localhost:3000`. | The brief gives no frontend port. |
+| The frontend is a Next.js (React) app served at `http://localhost:3000`. | The brief gives no frontend port; Next.js is a React framework and runs as a client-side UI here. |
 | The backend URL is injected into the frontend at container start, not at build time. | The brief requires it to be configurable by environment variable. |
 
 ## UI
 | Assumption | Why |
 |---|---|
-| No login. The student ID entered at the top is saved in the browser's `localStorage`. | Rule 11: applications must survive a refresh or a browser restart. |
+| No login. The student ID entered at the top is saved in the browser's `localStorage`, but only once it is a complete 17-digit number. | Rule 11: applications must survive a refresh or a browser restart. A half-typed ID must never be used for a request. |
 | Admin screens are open to anyone. | The brief says no login is required. |
 | The countdown uses the server's `expiresAt` and corrects for the difference between the browser clock and the server clock. | A wrong laptop clock must not show the wrong time left. |
 | The UI disables "Apply" and "Pay" when they cannot succeed, but still handles server `409` and `403` replies. | The server is the authority. |

@@ -3,7 +3,7 @@
 School Admission System — take-home for Onnorokom Projukti Limited. First-come-first-served seat holds with payment confirmation. Deadline **11 Nov 2026 23:59:59**.
 
 ## Stack
-.NET 8 minimal API + EF Core + PostgreSQL 16 · Next.js 16 (React 19, App Router) + TypeScript + Tailwind + TanStack Query · Docker Compose.
+.NET 10 minimal API + EF Core + PostgreSQL 16 · Next.js 16 (React 19, App Router) + TypeScript + Tailwind + TanStack Query · Docker Compose.
 
 ## Docs map
 @PRD.md — requirements and frozen API contract
@@ -30,7 +30,7 @@ Frontend (runtime): `BACKEND_URL`, read by the root layout at request time → `
 
 ## Critical rules (full list in RULES.md)
 - `held + confirmed ≤ totalSeats` enforced under a class-row `FOR UPDATE` lock; counts derived, never stored.
-- Expiry uses DB `now()`; lazy evaluation is the source of truth, sweeper is hygiene.
+- Expiry uses the DB clock (`clock_timestamp()`); lazy evaluation is the source of truth, sweeper is hygiene.
 - API contract is frozen; only add fields. Invalid input is always 4xx.
 - UI follows DESIGN.md: no gradients, no badges, no filler text, one accent color.
 - Windows host: keep LF line endings for scripts.

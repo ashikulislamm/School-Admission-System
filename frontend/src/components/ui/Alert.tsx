@@ -12,7 +12,7 @@ export function Alert({ children, onRetry }: AlertProps) {
   return (
     <div
       role="alert"
-      className="flex w-full items-center justify-between gap-4 rounded-control border border-danger bg-surface px-4 py-3 text-body text-danger"
+      className="flex w-full items-center justify-between gap-4 rounded-card border border-danger bg-surface px-4 py-3 text-body text-danger"
     >
       <p>{children}</p>
       {onRetry && (

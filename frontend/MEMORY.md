@@ -3,7 +3,7 @@
 Notes for `frontend/`. Read `DESIGN.md`, `ARCHITECTURE.md` §6 and `RULES.md` §3 first. Keep entries short and dated.
 
 ## Status
-- Initialized 2026-11-09: Next.js 16.4.5 + React 19.3 + Tailwind 4 scaffold, `output: "standalone"`, builds clean. Phase 4 done 2026-11-09: deps, tokens, API client, error copy, runtime config, UI primitives, app shell. Next: Phase 5 features.
+- Initialized 2026-11-09: Next.js 16.4.5 + React 19.3 + Tailwind 4 scaffold, `output: "standalone"`, builds clean. Phase 4 done 2026-11-09: deps, tokens, API client, error copy, runtime config, UI primitives, app shell. Phase 5 done 2026-11-09 (code; manual browser check pending): class list, application detail, my applications, admin, error boundaries. Next: Phase 6.
 
 ## Fixed facts
 - Next.js 16 (App Router, standalone), React 19, TypeScript strict, Tailwind 4, Radix primitives, lucide-react, TanStack Query. Routing is Next file routing (no React Router).
@@ -18,7 +18,7 @@ Notes for `frontend/`. Read `DESIGN.md`, `ARCHITECTURE.md` §6 and `RULES.md` §
 - `app/` `layout.tsx` (async server layout: `connection()` + `window.__CONFIG__` script, TopBar, Providers), `providers.tsx` (QueryClient; retries only network/5xx), route stubs `page.tsx`, `applications/`, `admin/` (title only until Phase 5).
 - `api/` `client.ts` (`ApiError`, `apiFetch`, sends `X-Student-Id`, feeds clock offset), `types.ts`, `admission.ts` (one function per endpoint).
 - `lib/` `config.ts`, `clock.ts` (`serverNow()`), `errors.ts` (`messageFor`, `isUnreachable`), `student-id.ts`, `cn.ts`. `hooks/useStudentId.ts` (`useSyncExternalStore`, hydration-safe).
-- `components/` `TopBar`, `StudentIdField`, `PageHeader`; `ui/` `Button`, `Input`, `Alert`. Still to add in Phase 5: Table, StatusText, Countdown, Dialog, toast.
+- `components/` `TopBar`, `StudentIdField`, `PageHeader`; `ui/` `Button`, `Input`, `Alert`. Phase 5 added `Table`, `StatusText`, `Countdown`, `Dialog` (ConfirmDialog), `Toast` (+`useToast`), `ButtonLink`. Also `ServerStatus` (global unreachable alert from the query cache), `QueryStates` (Loading/Empty/LoadError), `hooks/queries.ts` (keys + polling), `hooks/useNow.ts` (one shared 500ms server-time tick), `lib/hold.ts` (effective status, countdown format).
 
 ## UI rules (summary of DESIGN.md)
 - No gradients, no badges/pills, no filler text, one accent `#2563EB`, 6px radius, 1px borders, no shadows except overlays.
@@ -49,6 +49,10 @@ Notes for `frontend/`. Read `DESIGN.md`, `ARCHITECTURE.md` §6 and `RULES.md` §
 - Use `visibilitychange`-aware polling (`refetchIntervalInBackground: false`).
 - Timers: clean up intervals on unmount; use one shared ticking hook for countdowns.
 - Tests use MSW; use fake timers for countdown tests.
+
+- 2026-11-09: Next 16 error boundaries receive `retry`, not `reset` (see `error.md` in the bundled docs). `PageProps<"/route">` types exist only after `next typegen`/`next build`.
+- 2026-11-09: Apply buttons in the class table are secondary so each view keeps one primary button. Hold detail shows the student ID typed in the top bar (`GET /holds/{id}` does not return the owner).
+- 2026-11-09: When the local countdown hits 0 while the server still says HELD, the detail page invalidates hold/classes/myHolds once; the displayed status is EXPIRED and Pay disabled meanwhile.
 
 ## Open items
 _None._
