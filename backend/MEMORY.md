@@ -1,15 +1,15 @@
-# MEMORY â€” backend
+# MEMORY Ã¢â‚¬â€ backend
 
-Notes for `backend/`. Read `ARCHITECTURE.md` Â§3â€“5 and `RULES.md` Â§1â€“2 first. Keep entries short and dated.
+Notes for `backend/`. Read `ARCHITECTURE.md` Ã‚Â§3Ã¢â‚¬â€œ5 and `RULES.md` Ã‚Â§1Ã¢â‚¬â€œ2 first. Keep entries short and dated.
 
 ## Status
 - Foundation done (2026-11-08): config, error handling, EF model + `Initial` migration, startup migrate with retry, `/health`, Dockerfile, compose, 14 unit tests passing.
 - Verified in Docker (user-confirmed 2026-11-08): `docker compose up -d --build` works, `/health` returns ok, tables exist.
-- Phase 1 done (2026-11-09): all 8 endpoints + sweeper, smoke-tested with curl. Next: Phase 2 tests.
+- Phase 1 done (2026-11-09): all 8 endpoints + sweeper, smoke-tested with curl. Phase 2 done: 56 tests green x5. Next: Phase 3 (backend container check).
 
 ## Layout (`src/Admission.Api`)
 - `Configuration/` `AppSettings` (validated env config), `ConnectionStringHelper` (URL or key-value, SSL for cloud hosts), `DotEnv` (dev-only .env loader).
-- `Errors/` `ApiException` + `ErrorCodes` + `GlobalExceptionHandler` (all exceptions â†’ `{code,message}`).
+- `Errors/` `ApiException` + `ErrorCodes` + `GlobalExceptionHandler` (all exceptions Ã¢â€ â€™ `{code,message}`).
 - `Models/` `ClassEntity`, `Hold`, `HoldStatus`. `Data/` `AppDbContext`, `DatabaseInitializer`, `DesignTimeDbContextFactory`, `Migrations/`.
 - `Endpoints/` `HealthEndpoints`, `AdmissionEndpoints` (all 8 routes). `Services/` `ClassService`, `HoldService` (locking rules), `ExpirySweeper`, `Validation`. DTOs in `Models/Dtos.cs`.
 
@@ -22,14 +22,14 @@ Notes for `backend/`. Read `ARCHITECTURE.md` Â§3â€“5 and `RULES.md` Â§1
 - Error codes: `INVALID_INPUT`, `INVALID_STUDENT_ID`, `NOT_FOUND`, `NOT_OWNER`, `CLASS_FULL`, `ALREADY_APPLIED`, `HOLD_EXPIRED`, `HOLD_NOT_ACTIVE`, `METHOD_NOT_ALLOWED`, `SERVICE_UNAVAILABLE`, `INTERNAL_ERROR`.
 
 ## Algorithms (summary)
-- Apply: lock class row â†’ expire this student's lapsed holds â†’ duplicate check â†’ count active â†’ insert with `now() + duration`.
-- Confirm: lock hold row â†’ owner? â†’ CONFIRMED no-op / HELD&unexpired â†’ CONFIRMED / else 409.
-- Cancel: lock hold row â†’ owner â†’ HELDâ†’CANCELLED; CANCELLED/EXPIRED no-op 204; CONFIRMED 409.
+- Apply: lock class row Ã¢â€ â€™ expire this student's lapsed holds Ã¢â€ â€™ duplicate check Ã¢â€ â€™ count active Ã¢â€ â€™ insert with `now() + duration`.
+- Confirm: lock hold row Ã¢â€ â€™ owner? Ã¢â€ â€™ CONFIRMED no-op / HELD&unexpired Ã¢â€ â€™ CONFIRMED / else 409.
+- Cancel: lock hold row Ã¢â€ â€™ owner Ã¢â€ â€™ HELDÃ¢â€ â€™CANCELLED; CANCELLED/EXPIRED no-op 204; CONFIRMED 409.
 - Lock order: class then hold. Effective status: `HELD` with `expires_at <= now()` is reported `EXPIRED`.
 
 ## Decisions
 - 2026-11-08: Schema uses snake_case columns set explicitly (no naming-convention package).
-- 2026-11-08: Migrations run at startup with retry (30Ã—2s); EF Core's own migration lock covers two processes.
+- 2026-11-08: Migrations run at startup with retry (30Ãƒâ€”2s); EF Core's own migration lock covers two processes.
 - 2026-11-08: Cloud DB mode: use direct (non-pooled) connection; PgBouncer transaction mode can break session features.
 
 ## Gotchas
@@ -47,6 +47,9 @@ ow() is frozen at transaction start and goes stale after waiting on the class lo
 - Sweeper must be disable-able via config for the lazy-expiry test.
 
 ## Test notes
+- Integration tests (Phase 2): PostgresFixture (one Testcontainers container, xunit collection `db`), AppFactory/`Api` helpers in `TestInfra.cs`. Tests use fresh classes and random student ids, so no truncation is needed.
+- Files: `ConcurrencyTests` (300/120, same-student, 20 confirms, two instances), `HoldLifecycleTests` (expiry, sweeper, cancel, ownership, /me/holds), `ValidationTests`.
+- Factory settings: `HOLD_DURATION_SECONDS`, `SWEEPER_ENABLED` via `UseSetting`. Test server rejects `%00` paths itself, so that case is not testable there.
 - Unit tests (no Docker): `ConnectionStringHelperTests`, `AppSettingsTests`.
 - Integration/concurrency tests: Testcontainers Postgres, shared fixture, truncate between tests.
 - Two-instance test: two `WebApplicationFactory` on the same connection string.

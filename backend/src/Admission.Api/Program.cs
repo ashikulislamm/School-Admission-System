@@ -21,6 +21,9 @@ builder.Services.AddSingleton(settings);
 
 builder.Services.AddDbContext<AppDbContext>(o => o.UseNpgsql(settings.ConnectionString));
 
+// Strict numbers: "5" is not an integer.
+builder.Services.ConfigureHttpJsonOptions(o => o.SerializerOptions.NumberHandling = System.Text.Json.Serialization.JsonNumberHandling.Strict);
+
 builder.Services.AddScoped<ClassService>();
 builder.Services.AddScoped<HoldService>();
 builder.Services.AddHostedService<ExpirySweeper>();
