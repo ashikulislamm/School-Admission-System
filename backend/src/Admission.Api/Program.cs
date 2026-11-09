@@ -2,6 +2,7 @@ using Admission.Api.Configuration;
 using Admission.Api.Data;
 using Admission.Api.Endpoints;
 using Admission.Api.Errors;
+using Admission.Api.Services;
 using Microsoft.EntityFrameworkCore;
 
 DotEnv.LoadIfDevelopment();
@@ -19,6 +20,10 @@ var settings = AppSettings.Load(builder.Configuration);
 builder.Services.AddSingleton(settings);
 
 builder.Services.AddDbContext<AppDbContext>(o => o.UseNpgsql(settings.ConnectionString));
+
+builder.Services.AddScoped<ClassService>();
+builder.Services.AddScoped<HoldService>();
+builder.Services.AddHostedService<ExpirySweeper>();
 
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
@@ -48,6 +53,7 @@ app.UseStatusCodePages(async ctx =>
 app.UseCors();
 
 app.MapHealthEndpoints();
+app.MapAdmissionEndpoints();
 
 await DatabaseInitializer.MigrateAsync(app.Services);
 

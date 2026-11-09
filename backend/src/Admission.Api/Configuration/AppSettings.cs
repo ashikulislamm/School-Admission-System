@@ -4,7 +4,8 @@ namespace Admission.Api.Configuration;
 public sealed record AppSettings(
     string ConnectionString,
     int HoldDurationSeconds,
-    string[] CorsOrigins)
+    string[] CorsOrigins,
+    bool SweeperEnabled = true)
 {
     public const int DefaultHoldDurationSeconds = 600;
     private const string DefaultCorsOrigins = "http://localhost:3000,http://localhost:5173";
@@ -43,6 +44,7 @@ public sealed record AppSettings(
         return new AppSettings(
             ConnectionStringHelper.Normalize(rawConnection),
             holdSeconds,
-            origins);
+            origins,
+            !string.Equals(config["SWEEPER_ENABLED"], "false", StringComparison.OrdinalIgnoreCase));
     }
 }
