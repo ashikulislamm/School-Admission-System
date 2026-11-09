@@ -1,6 +1,6 @@
 # MEMORY — frontend
 
-Notes for `frontend/`. Read `DESIGN.md`, `ARCHITECTURE.md` §6 and `RULES.md` §3 first. Keep entries short and dated.
+Notes for `frontend/`. Read `docs/DESIGN.md`, `docs/ARCHITECTURE.md` §6 and `docs/RULES.md` §3 first. Keep entries short and dated.
 
 ## Status
 - Initialized 2026-11-09: Next.js 16.4.5 + React 19.3 + Tailwind 4 scaffold, `output: "standalone"`, builds clean. Phase 4 done 2026-11-09: deps, tokens, API client, error copy, runtime config, UI primitives, app shell. Phase 5 done 2026-11-09 (code; manual browser check pending): class list, application detail, my applications, admin, error boundaries. Next: Phase 6.
@@ -20,7 +20,7 @@ Notes for `frontend/`. Read `DESIGN.md`, `ARCHITECTURE.md` §6 and `RULES.md` §
 - `lib/` `config.ts`, `clock.ts` (`serverNow()`), `errors.ts` (`messageFor`, `isUnreachable`), `student-id.ts`, `cn.ts`. `hooks/useStudentId.ts` (`useSyncExternalStore`, hydration-safe).
 - `components/` `TopBar`, `StudentIdField`, `PageHeader`; `ui/` `Button`, `Input`, `Alert`. Phase 5 added `Table`, `StatusText`, `Countdown`, `Dialog` (ConfirmDialog), `Toast` (+`useToast`), `ButtonLink`. Also `ServerStatus` (global unreachable alert from the query cache), `QueryStates` (Loading/Empty/LoadError), `hooks/queries.ts` (keys + polling), `hooks/useNow.ts` (one shared 500ms server-time tick), `lib/hold.ts` (effective status, countdown format).
 
-## UI rules (summary of DESIGN.md)
+## UI rules (summary of docs/DESIGN.md)
 - No gradients, no badges/pills, no filler text, one accent `#2563EB`, 6px radius, 1px borders, no shadows except overlays.
 - Status is plain uppercase colored text: HELD warning, CONFIRMED success, EXPIRED/CANCELLED neutral.
 - One primary button per view. Verb-first labels. Errors are one plain sentence in an Alert.

@@ -6,13 +6,13 @@ School Admission System — take-home for Onnorokom Projukti Limited. First-come
 .NET 10 minimal API + EF Core + PostgreSQL 16 · Next.js 16 (React 19, App Router) + TypeScript + Tailwind + TanStack Query · Docker Compose.
 
 ## Docs map
-@PRD.md — requirements and frozen API contract
-@ARCHITECTURE.md — design, schema, concurrency algorithm
-@RULES.md — non-negotiable rules
-@DESIGN.md — UI design system (read before any UI work)
-@PHASES.md — roadmap and status
-@AGENT.md — agent workflow
-@MEMORY.md — project memory (also `backend/MEMORY.md`, `frontend/MEMORY.md`)
+@docs/PRD.md — requirements and frozen API contract
+@docs/ARCHITECTURE.md — design, schema, concurrency algorithm
+@docs/RULES.md — non-negotiable rules
+@docs/DESIGN.md — UI design system (read before any UI work)
+@docs/PHASES.md — roadmap and status
+@AGENTS.md — agent workflow
+@docs/MEMORY.md — project memory (also `backend/MEMORY.md`, `frontend/MEMORY.md`)
 
 ## Commands
 ```
@@ -28,12 +28,12 @@ npm --prefix frontend test       # Vitest
 Backend: `ConnectionStrings__Default`, `HOLD_DURATION_SECONDS` (default 600), `CORS_ORIGINS`.
 Frontend (runtime): `BACKEND_URL`, read by the root layout at request time → `window.__CONFIG__`.
 
-## Critical rules (full list in RULES.md)
+## Critical rules (full list in docs/RULES.md)
 - `held + confirmed ≤ totalSeats` enforced under a class-row `FOR UPDATE` lock; counts derived, never stored.
 - Expiry uses the DB clock (`clock_timestamp()`); lazy evaluation is the source of truth, sweeper is hygiene.
 - API contract is frozen; only add fields. Invalid input is always 4xx.
-- UI follows DESIGN.md: no gradients, no badges, no filler text, one accent color.
+- UI follows docs/DESIGN.md: no gradients, no badges, no filler text, one accent color.
 - Windows host: keep LF line endings for scripts.
 
 ## Workflow
-Follow `PHASES.md` in order. Update `PHASES.md` and the relevant `MEMORY.md` as you go. **Claude never commits or pushes; the user makes every commit.** Suggest a Conventional Commit message after each unit of work. Never commit the assignment PDF.
+Follow `docs/PHASES.md` in order. Update `docs/PHASES.md` and the relevant `MEMORY.md` (`docs/`, `backend/` or `frontend/`) as you go. **Claude never commits or pushes; the user makes every commit.** Suggest a Conventional Commit message after each unit of work. Never commit the assignment PDF.

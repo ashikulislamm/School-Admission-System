@@ -77,6 +77,6 @@ Extra response fields are allowed; none may be removed or renamed. `expiresAt` i
 - [ ] ≥3 backend tests (target ~10)
 - [ ] `docker compose up` from a clean clone works; data persists after down/up
 - [ ] UI meets U1–U5
-- [ ] `README.md`, `ASSUMPTIONS.md`, `AI_USAGE.md`
+- [ ] `../README.md`, `../ASSUMPTIONS.md`, `../AI_USAGE.md`
 - [ ] Incremental git history, public GitHub repo, submitted before 11 Nov 2026 23:59:59
 - [ ] Assignment PDF is NOT in the repo

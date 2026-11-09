@@ -54,7 +54,8 @@ Where the spec is not explicit, this is what I assumed and why.
 | Assumption | Why |
 |---|---|
 | No login. The student ID entered at the top is saved in the browser's `localStorage`, but only once it is a complete 17-digit number. | Rule 11: applications must survive a refresh or a browser restart. A half-typed ID must never be used for a request. |
-| Admin screens are open to anyone. | The brief says no login is required. |
+| Admin screens are open to anyone, and the student ID is self-asserted: anyone who types a number acts as that student. This is not secure and would need real login (sessions or tokens) in production. | The brief says no login is required, and the graders call the API with only `X-Student-Id`, so adding authentication would break the contract. |
+| The interface is light-theme only, with a soft background and one blue accent. | Chosen for a clean, simple look; the brief says looks are secondary to working correctly. |
 | The countdown uses the server's `expiresAt` and corrects for the difference between the browser clock and the server clock. | A wrong laptop clock must not show the wrong time left. |
 | The UI disables "Apply" and "Pay" when they cannot succeed, but still handles server `409` and `403` replies. | The server is the authority. |
 
@@ -63,5 +64,5 @@ Where the spec is not explicit, this is what I assumed and why.
 2. Inside the lock the code counts active holds and inserts only if the count is below `totalSeats`. Nothing is decided from memory.
 3. The backend keeps no in-memory counters, locks or caches that affect correctness, so any number of processes behave the same.
 4. A partial unique index on `(class_id, student_id)` for active statuses blocks duplicates even if application code has a bug.
-5. Expiry compares against the database `now()`. The background sweeper only tidies statuses and is safe to run in every process.
+5. Expiry compares against the database clock (`clock_timestamp()`). The background sweeper only tidies statuses and is safe to run in every process (`FOR UPDATE SKIP LOCKED`).
 6. A test starts two app instances on one database, sends parallel requests to both, and checks the cap is never exceeded.

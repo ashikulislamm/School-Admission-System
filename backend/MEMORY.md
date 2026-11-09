@@ -1,6 +1,6 @@
 # MEMORY — backend
 
-Notes for `backend/`. Read `ARCHITECTURE.md` §3–5 and `RULES.md` §1–2 first. Keep entries short and dated.
+Notes for `backend/`. Read `docs/ARCHITECTURE.md` §3–5 and `docs/RULES.md` §1–2 first. Keep entries short and dated.
 
 ## Status
 - Foundation done (2026-11-08): config, error handling, EF model + `Initial` migration, startup migrate with retry, `/health`, Dockerfile, compose, 14 unit tests passing.
@@ -28,7 +28,7 @@ Notes for `backend/`. Read `ARCHITECTURE.md` §3–5 and `RULES.md` §1–2 firs
 - Lock order: class then hold. Effective status: `HELD` with `expires_at <= now()` is reported `EXPIRED`.
 
 ## Decisions
-- 2026-11-09: Images are .NET 10 (sdk:10.0 / aspnet:10.0) to match net10.0 target; RULES.md still says 8.0, which would not run this build. Runs as non-root (USER $APP_UID).
+- 2026-11-09: Images are .NET 10 (sdk:10.0 / aspnet:10.0) to match net10.0 target; docs/RULES.md still says 8.0, which would not run this build. Runs as non-root (USER $APP_UID).
 - 2026-11-08: Schema uses snake_case columns set explicitly (no naming-convention package).
 - 2026-11-08: Migrations run at startup with retry (30×2s); EF Core's own migration lock covers two processes.
 - 2026-11-08: Cloud DB mode: use direct (non-pooled) connection; PgBouncer transaction mode can break session features.

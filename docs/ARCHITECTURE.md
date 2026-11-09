@@ -18,7 +18,8 @@ The backend is stateless: no in-memory locks, caches or counters. That is what m
     src/ app/ (routes) api/ components/ features/ hooks/ lib/
     next.config.ts  Dockerfile  MEMORY.md
   docker-compose.yml
-  *.md (PRD, ARCHITECTURE, PHASES, RULES, DESIGN, AGENT, CLAUDE, MEMORY, README, ASSUMPTIONS, AI_USAGE)
+  docs/  PRD, ARCHITECTURE, RULES, DESIGN, PHASES, MEMORY
+  *.md   README, ASSUMPTIONS, AI_USAGE, CLAUDE, AGENTS (root)
   .gitattributes  (eol=lf)
 ```
 

@@ -1,9 +1,9 @@
 # MEMORY (root)
 
-Project-wide memory. Area-specific notes: `backend/MEMORY.md`, `frontend/MEMORY.md`. Keep entries short and dated. Newest first within each section.
+Project-wide memory. Area-specific notes: `../backend/MEMORY.md`, `../frontend/MEMORY.md`. Keep entries short and dated. Newest first within each section.
 
 ## Status
-- Phase: 0 and backend foundation done (config, errors, EF model + `Initial` migration, /health, Dockerfile, compose). Verified inside Docker by the user. Phase 1 (8 endpoints + sweeper) done 2026-11-09. Phases 0-3 done (backend complete, containerized, persistence verified). Phase 4 (frontend foundation) done 2026-11-09. Phase 5 (frontend features) code done 2026-11-09; browser walkthrough of U1-U5 pending. Phase 6 done 2026-11-09 (frontend container, compose up verified by the user). Phase 7 (frontend tests) done 2026-11-09. Next: Phase 8 docs and release.
+- Phase: 0 and backend foundation done (config, errors, EF model + `Initial` migration, /health, Dockerfile, compose). Verified inside Docker by the user. Phase 1 (8 endpoints + sweeper) done 2026-11-09. Phases 0-3 done (backend complete, containerized, persistence verified). Phase 4 (frontend foundation) done 2026-11-09. Phase 5 (frontend features) code done 2026-11-09; browser walkthrough of U1-U5 pending. Phase 6 done 2026-11-09 (frontend container, compose up verified by the user). Phase 7 (frontend tests) done 2026-11-09. Phase 8 docs written 2026-11-09 (README, ASSUMPTIONS, AI_USAGE). Remaining: clean-clone test, rename branch to main, public GitHub repo, submit before the deadline.
 - The user makes all git commits (see Claude memory). Branch is still `master` until the user renames it.
 - Last updated: 2026-11-09. Deadline: 2026-11-11 23:59:59.
 
@@ -15,6 +15,7 @@ Project-wide memory. Area-specific notes: `backend/MEMORY.md`, `frontend/MEMORY.
 | 2026-11-08 | DB clock for all expiry logic (`clock_timestamp()`, not `now()`, since 2026-11-09) | Avoid process clock skew; `now()` is stale after waiting on a lock |
 | 2026-11-08 | Confirm expired → 409; cancel confirmed → 409; not owner → 403 | Consistent semantics; document in ASSUMPTIONS |
 | 2026-11-09 | Frontend is Next.js 16 (App Router, standalone), not Vite; `BACKEND_URL` injected by root layout at request time | User choice; still React; one image, any backend URL; drops nginx + entrypoint script |
+| 2026-11-09 | Planning docs (PRD, ARCHITECTURE, RULES, DESIGN, PHASES, MEMORY) live in `docs/`; README, ASSUMPTIONS, AI_USAGE, CLAUDE, AGENTS stay in the root; `backend/` and `frontend/` keep their own MEMORY.md | User reorganized; links updated everywhere |
 | 2026-11-08 | Tailwind + Radix + lucide, no heavy UI kit | Full control for the minimal DESIGN.md look |
 
 ## Assumptions to carry into ASSUMPTIONS.md

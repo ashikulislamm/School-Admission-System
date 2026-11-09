@@ -64,7 +64,7 @@ Status legend: `[ ]` todo · `[x]` done
 **Done when:** `npm --prefix frontend test` green. (2026-11-09: 33 tests in 5 files, stable over 3 runs; breaking `effectiveStatus` on purpose fails the unit and UI expiry tests.)
 
 ## Phase 8 : Docs & release
-- [ ] `README.md` (run, URLs, tests), `ASSUMPTIONS.md` (incl. multi-process explanation), `AI_USAGE.md` (real mistakes only)
+- [x] `../README.md` (run, URLs, tests), `../ASSUMPTIONS.md` (incl. multi-process explanation), `../AI_USAGE.md` (real mistakes only) (written 2026-11-09)
 - [ ] Final clean-clone test on a fresh directory
 - [ ] Public GitHub repo, push, submit link at https://q-rp.com/c/4CXx
 - [ ] Verify nothing is pushed after the deadline

@@ -1,6 +1,6 @@
 # RULES
 
-Non-negotiable. If a rule must be broken, record why in `ASSUMPTIONS.md`.
+Non-negotiable. If a rule must be broken, record why in `../ASSUMPTIONS.md`.
 
 ## 1. Invariants (never violate)
 1. `held + confirmed ≤ totalSeats`, always. Enforced inside a DB row lock, never by app-side checks alone.
@@ -57,8 +57,8 @@ Non-negotiable. If a rule must be broken, record why in `ASSUMPTIONS.md`.
 ## 7. Documentation
 - Update the relevant `MEMORY.md` after any non-obvious decision, gotcha, or fix.
 - Update `PHASES.md` checkboxes as work completes.
-- `AI_USAGE.md` records real mistakes and how they were caught; never fabricate.
-- `ASSUMPTIONS.md` stays short: assumption → reason.
+- `../AI_USAGE.md` records real mistakes and how they were caught; never fabricate.
+- `../ASSUMPTIONS.md` stays short: assumption → reason.
 
 ## 8. Definition of done (any task)
 Builds · tests pass · matches `DESIGN.md` (UI) · errors handled · docs/memory updated · committed.
